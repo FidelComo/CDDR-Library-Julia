@@ -78,18 +78,16 @@ function solve_constant_depth_decision_rules_depth_one(subi_a,subj_a,valij_a,bet
 
     time2 = @elapsed begin
         #Solution
-        oldstd = stdout
-        redirect_stdout(devnull)
+        set_silent(CDDR1)
         optimize!(CDDR1)
-        redirect_stdout(oldstd)
 
         sol = [JuMP.value.(u), JuMP.value.(v), JuMP.value.(z)]
 
-        if JuMP.INFEASIBLE == 1
+        if termination_status(CDDR1) == JuMP.INFEASIBLE
             print("Infeasible problem")
             out=1
             opt_value=Inf
-        elseif JuMP.DUAL_INFEASIBLE == 1
+        elseif termination_status(CDDR1) == JuMP.DUAL_INFEASIBLE
             print("Primal infinite optimal value")
             out=2
             opt_value=-Inf
