@@ -48,7 +48,11 @@ function solve_constant_depth_decision_rules_depth_one(subi_a,subj_a,valij_a,bet
                 append!(var, u[tau,subj_a[t][tau][k],s,eta])
                 append!(val, valij_a[t][tau][k])
             end
-            @constraint(CDDR1, v[t,i,s,eta] - val'*var == -betas[t][s][eta,i])
+            if isempty(val)
+                @constraint(CDDR1, v[t,i,s,eta] == -betas[t][s][eta,i])
+            else
+                @constraint(CDDR1, v[t,i,s,eta] - val'*var == -betas[t][s][eta,i])
+            end
             nconst += 1
         end
 
